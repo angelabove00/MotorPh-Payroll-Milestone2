@@ -7,7 +7,8 @@ public class Main {
         emp.setName("Juan Dela Cruz");
         emp.setEmployeeNumber("EMP001");
         emp.setContactInfo("09171234567");
-        System.out.println("Employee: " + emp.getName() + ", ID: " + emp.getEmployeeNumber());
+        emp.setBirthday(1991,12,3);
+        System.out.println("Employee: " + emp.getName() + ", ID: " + emp.getEmployeeNumber() + ", Born: " + emp.getBirthday());
 
         Attendance att = new Attendance();
         att.setDate(LocalDate.now());
