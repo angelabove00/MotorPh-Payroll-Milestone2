@@ -1,8 +1,10 @@
-public class LoginSession {
-    private String loginTime;
+import java.time.LocalTime;
 
-    public String getLoginTime() { return loginTime; }
-    public void setLoginTime(String loginTime) { this.loginTime = loginTime; }
+public class LoginSession {
+    private LocalTime loginTime;
+
+    public LocalTime getLoginTime() { return loginTime; }
+    public void setLoginTime(LocalTime loginTime) { this.loginTime = loginTime; }
 
     public boolean isLateLogin() {
         // TODO: implement grace‑period logic
