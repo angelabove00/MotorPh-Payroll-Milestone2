@@ -10,3 +10,5 @@ This project includes features for tracking employees, login sessions, attendanc
 
 ## Authors
 Angela Mae Ortega
+Adrian San Juan
+Aristides Panlilio
