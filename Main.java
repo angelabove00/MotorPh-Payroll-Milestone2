@@ -28,5 +28,9 @@ public class Main {
         pay.setDeductions(ded);
         System.out.println("Gross Salary: " + pay.calculateGrossSalary() + " PHP");
         System.out.println("Net Salary:   " + pay.calculateNetSalary() + " PHP");
+        
+        LoginSession sid = new LoginSession();
+        sid.setLoginTime(LocalTime.now());
+        System.out.println("\n\n\nLogin Time: " + sid.getLoginTime());
     }
 }
