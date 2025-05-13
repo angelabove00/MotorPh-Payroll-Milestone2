@@ -12,3 +12,5 @@ This project includes features for tracking employees, login sessions, attendanc
   Angela Mae Ortega<br />
   Adrian San Juan<br />
   Aristides Panlilio<br />
+  Antoine Gabriel Medina<br />
+  Michael Victor Reyna<br />
