@@ -1,3 +1,5 @@
+package model;
+
 import java.time.LocalDate;
 
 public class Employee {
@@ -8,23 +10,38 @@ public class Employee {
     private String position;
     private String department;
 
-    // … other fields …
+    public Employee() {
+    }
+    
+    public Employee(Employee other) {
+        this.employeeNumber = other.employeeNumber;
+        this.name = other.name;
+        this.contactInfo = other.contactInfo;
+        this.birthday = other.birthday != null ? LocalDate.from(other.birthday) : null;
+        this.position = other.position;
+        this.department = other.department;
+    }
 
     public String getEmployeeNumber() { return employeeNumber; }
-    public void setEmployeeNumber(String employeeNumber) { this.employeeNumber = employeeNumber; }
+    public void setEmployeeNumber(String empNum) { this.employeeNumber = empNum; }
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
     public String getContactInfo() { return contactInfo; }
-    public void setContactInfo(String contactInfo) { this.contactInfo = contactInfo; }
+    public void setContactInfo(String contact) { this.contactInfo = contact; }
 
     public String getPosition() { return position; }
-    public void setPosition(String position) { this.position = position; }
+    public void setPosition(String pos) { this.position = pos; }
 
     public String getDepartment() { return department; }
-    public void setDepartment(String department) { this.department = department; }
+    public void setDepartment(String dept) { this.department = dept; }
 
-    public String getBirthday() { return birthday.toString(); }
-    public void setBirthday(int b_year, int b_month, int b_day) { birthday = LocalDate.of(b_year, b_month, b_day); }
-}
+    public String getBirthday() { 
+        return birthday != null ? birthday.toString() : "Not set"; 
+    }
+    
+    public void setBirthday(int year, int month, int day) { 
+        birthday = LocalDate.of(year, month, day); 
+    }
+} 
