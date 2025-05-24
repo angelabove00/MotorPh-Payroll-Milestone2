@@ -1,36 +1,61 @@
+package model;
+
 public class Payroll {
-    private double totalHoursWorked;
-    private double overtimeHours;
-    private double bonuses;
-    private double grossSalary;
-    private double netSalary;
-    private double loanRepayments;
-    private Deductions deductions;
+    // Pay info
+    private double hoursWorked;
+    private double overtimeHrs;
+    private double bonus;
+    private double grossPay;    // before deductions
+    private double netPay;      // after deductions
+    private double loans;       // any loans to be paid
+    private Deductions deduc;   // all the government deductions
 
-    // Setters & getters for fields used in Main
-    public void setTotalHoursWorked(double h) { this.totalHoursWorked = h; }
-    public double getTotalHoursWorked() { return totalHoursWorked; }
+    // Pay rates in pesos
+    private static final double NORMAL_RATE = 100.0;  // per hour
+    private static final double OT_RATE = 125.0;      // overtime rate
 
-    public void setOvertimeHours(double o) { this.overtimeHours = o; }
-    public double getOvertimeHours() { return overtimeHours; }
+    // Simple getters/setters
+    public void setHoursWorked(double hrs) { this.hoursWorked = hrs; }
+    public double getHoursWorked() { return hoursWorked; }
 
-    public void setBonuses(double b) { this.bonuses = b; }
-    public double getBonuses() { return bonuses; }
+    public void setOvertimeHours(double hrs) { this.overtimeHrs = hrs; }
+    public double getOvertimeHours() { return overtimeHrs; }
 
-    public void setLoanRepayments(double l) { this.loanRepayments = l; }
-    public double getLoanRepayments() { return loanRepayments; }
+    public void setBonuses(double amt) { this.bonus = amt; }
+    public double getBonuses() { return bonus; }
 
-    public void setDeductions(Deductions d) { this.deductions = d; }
-    public Deductions getDeductions() { return deductions; }
+    public void setLoans(double amt) { this.loans = amt; }
+    public double getLoans() { return loans; }
 
-    public double calculateGrossSalary() {
-        grossSalary = (totalHoursWorked * 100) + (overtimeHours * 125) + bonuses;
-        return grossSalary;
+    public void setDeductions(Deductions d) { this.deduc = d; }
+    public Deductions getDeductions() { return deduc; }
+
+    // Main calculation methods
+    public double getTotalPay() {
+        // Calculate total pay including overtime and bonus
+        grossPay = (hoursWorked * NORMAL_RATE) + 
+                  (overtimeHrs * OT_RATE) + 
+                  bonus;
+        return grossPay;
     }
 
-    public double calculateNetSalary() {
-        double totalDeductions = deductions.getTotalDeductions() + loanRepayments;
-        netSalary = calculateGrossSalary() - totalDeductions;
-        return netSalary;
+    public double getFinalPay() {
+        // Get final pay after all deductions
+        if (deduc != null) {
+            double totalDeduc = deduc.getTotalDeductions() + loans;
+            netPay = getTotalPay() - totalDeduc;
+            return netPay;
+        }
+        return getTotalPay(); // if no deductions set
     }
-}
+
+    public void calculateGrossSalary() {
+        if (hoursWorked > 0) {
+            grossPay = (hoursWorked * NORMAL_RATE) + 
+                      (overtimeHrs * OT_RATE) + 
+                      bonus;
+        } else {
+            grossPay = 0;
+        }
+    }
+} 
