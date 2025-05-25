@@ -16,7 +16,7 @@ A Java Swing-based desktop application for managing employee data, attendance, a
 ## How to Run
 1. Clone the repository:
 2. Open the project in NetBeans, VScode or any Java IDE
-2. Run `MainInterface.java`
+2. Run `Main.java`
 3. You’ll see the full MotorPH Employee App UI
 
 ## Authors
