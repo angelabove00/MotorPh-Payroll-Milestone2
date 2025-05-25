@@ -69,7 +69,9 @@ public class MainInterface extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(900, 700);
         setLocationRelativeTo(null);
-        setMinimumSize(new Dimension(800, 600));
+        setResizable(false);  //--removed ability to resize jFrame!!
+                              //  resizing the window biiger and then downsizing it back produces scroll bars that wont disappear even if you go smaller and i could not remove them for the life of me. 
+                              //  disabling the ability to resize the window preserves the beauty of the jTextArea ont he code down below.
     }
     
     private void setupUI() {
