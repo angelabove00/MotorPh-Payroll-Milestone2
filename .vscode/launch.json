@@ -9,6 +9,48 @@
             "name": "Main",
             "request": "launch",
             "mainClass": "Main",
+            "projectName": "MotorPH-Employee-MS2 TRY_53fb5a24"
+        },
+        {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "Main",
+            "projectName": "MotorPH-Employee-MS2_4f544529"
+        },
+        {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "Main",
+            "projectName": "MotorPH-Employee-App-2-test - Copy_11722a2c"
+        },
+        {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "Main",
+            "projectName": "MotorPH-Employee-App-2-test_3a78e1c"
+        },
+        {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "view.Main",
+            "projectName": "MotorPH-Employee-App-2_cabca203"
+        },
+        {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "Main",
+            "projectName": "MotorPH-Employee-App-2_cabca203"
+        },
+        {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "Main",
             "projectName": "MotorPH-Employee-App_4f541bde"
         },
         {

@@ -3,45 +3,77 @@ package model;
 import java.time.LocalDate;
 
 public class Employee {
-    private String employeeNumber;
-    private String name;
-    private String contactInfo;
-    private LocalDate birthday;
-    private String position;
-    private String department;
+    private final String employeeNumber;
+    private final String firstName;
+    private final String lastName;
+    private final String contactInfo;
+    private final String position;
+    private final String department;
+    private final LocalDate birthday;
+    private final String sssNumber;
+    private final String philhealthNumber;
+    private final String tinNumber;
+    private final String pagibigNumber;
 
-    public Employee() {
-    }
-    
-    public Employee(Employee other) {
-        this.employeeNumber = other.employeeNumber;
-        this.name = other.name;
-        this.contactInfo = other.contactInfo;
-        this.birthday = other.birthday != null ? LocalDate.from(other.birthday) : null;
-        this.position = other.position;
-        this.department = other.department;
+    public Employee(String employeeNumber, String firstName, String lastName, String contactInfo,
+                   String position, String department, LocalDate birthday, String sssNumber,
+                   String philhealthNumber, String tinNumber, String pagibigNumber) {
+        this.employeeNumber = employeeNumber;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.contactInfo = contactInfo;
+        this.position = position;
+        this.department = department;
+        this.birthday = birthday;
+        this.sssNumber = sssNumber;
+        this.philhealthNumber = philhealthNumber;
+        this.tinNumber = tinNumber;
+        this.pagibigNumber = pagibigNumber;
     }
 
     public String getEmployeeNumber() { return employeeNumber; }
-    public void setEmployeeNumber(String empNum) { this.employeeNumber = empNum; }
-
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-
+    public String getFirstName() { return firstName; }
+    public String getLastName() { return lastName; }
     public String getContactInfo() { return contactInfo; }
-    public void setContactInfo(String contact) { this.contactInfo = contact; }
-
     public String getPosition() { return position; }
-    public void setPosition(String pos) { this.position = pos; }
-
     public String getDepartment() { return department; }
-    public void setDepartment(String dept) { this.department = dept; }
+    public LocalDate getBirthday() { return birthday; }
+    public String getSssNumber() { return sssNumber; }
+    public String getPhilhealthNumber() { return philhealthNumber; }
+    public String getTinNumber() { return tinNumber; }
+    public String getPagibigNumber() { return pagibigNumber; }
 
-    public String getBirthday() { 
-        return birthday != null ? birthday.toString() : "Not set"; 
+    // CSV conversion methods
+    public String toCsvString() {
+        return String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",
+            employeeNumber, firstName, lastName, contactInfo, birthday.toString(),
+            position, department, sssNumber, philhealthNumber, tinNumber, pagibigNumber);
     }
     
-    public void setBirthday(int year, int month, int day) { 
-        birthday = LocalDate.of(year, month, day); 
+    public static Employee fromCsvString(String csvLine) {
+        String[] parts = csvLine.split(",");
+        if (parts.length != 11) {
+            throw new IllegalArgumentException("Invalid CSV format: expected 11 fields, got " + parts.length);
+        }
+        
+        try {
+            Employee emp = new Employee(
+                parts[0].trim(),
+                parts[1].trim(),
+                parts[2].trim(),
+                parts[3].trim(),
+                parts[5].trim(),
+                parts[6].trim(),
+                LocalDate.parse(parts[4].trim()),
+                parts[7].trim(),
+                parts[8].trim(),
+                parts[9].trim(),
+                parts[10].trim()
+            );
+            
+            return emp;
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Error parsing CSV line: " + e.getMessage());
+        }
     }
 } 
