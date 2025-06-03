@@ -9,6 +9,13 @@
             "name": "Main",
             "request": "launch",
             "mainClass": "Main",
+            "projectName": "MotorPH-Employee-MS2 FEATURE2_404d2d33"
+        },
+        {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "Main",
             "projectName": "MotorPH-Employee-MS2 TRY_53fb5a24"
         },
         {
