@@ -21,4 +21,6 @@ This ensures accurate, up-to-date records and improves ease of maintenance for t
 3. Run `Main.java` from the `src` directory
 4. The full MotorPH Employee App interface will launch
 
+## Author
+Angela Mae Ortega
 ---
