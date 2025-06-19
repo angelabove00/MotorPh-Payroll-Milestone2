@@ -20,8 +20,11 @@ public class EmployeeMainFrame extends JFrame {
     private JTextField searchField;
     private JButton viewButton;
     private JButton newButton;
+    private JButton adminPanelButton;
 
     public EmployeeMainFrame() {
+        System.out.println("DEBUG: EmployeeMainFrame constructor invoked.");
+        System.out.println("EmployeeMainFrame constructor entered.");
         setTitle("MotorPH Employee Management System");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(UIConstants.MAIN_WINDOW_SIZE);
@@ -33,11 +36,11 @@ public class EmployeeMainFrame extends JFrame {
             System.out.println("Loading application icon...");
             java.net.URL iconUrl = EmployeeMainFrame.class.getResource("/view/assets/logo.png");
             if (iconUrl == null) {
-                System.err.println("Icon resource not found in classpath: /view/assets/logo.png");
+                System.err.println("ERROR: Icon resource not found in classpath: /view/assets/logo.png");
                 // Try alternate path
                 iconUrl = EmployeeMainFrame.class.getResource("assets/logo.png");
                 if (iconUrl == null) {
-                    System.err.println("Icon not found in alternate path: assets/logo.png");
+                    System.err.println("ERROR: Icon not found in alternate path: assets/logo.png");
                 }
             }
             if (iconUrl != null) {
@@ -46,7 +49,7 @@ public class EmployeeMainFrame extends JFrame {
                 setIconImage(icon.getImage());
             }
         } catch (Exception e) {
-            System.err.println("Error loading application icon: " + e.getMessage());
+            System.err.println("ERROR loading application icon: " + e.getMessage());
             e.printStackTrace();
         }
 
@@ -78,11 +81,11 @@ public class EmployeeMainFrame extends JFrame {
             System.out.println("Loading header logo...");
             java.net.URL logoUrl = EmployeeMainFrame.class.getResource("/view/assets/logo.png");
             if (logoUrl == null) {
-                System.err.println("Logo resource not found in classpath: /view/assets/logo.png");
+                System.err.println("ERROR: Logo resource not found in classpath: /view/assets/logo.png");
                 // Try alternate path
                 logoUrl = EmployeeMainFrame.class.getResource("assets/logo.png");
                 if (logoUrl == null) {
-                    System.err.println("Logo not found in alternate path: assets/logo.png");
+                    System.err.println("ERROR: Logo not found in alternate path: assets/logo.png");
                 }
             }
             if (logoUrl != null) {
@@ -94,11 +97,11 @@ public class EmployeeMainFrame extends JFrame {
                     logoLabel.setBorder(new EmptyBorder(0, 0, 0, 20));
                     titlePanel.add(logoLabel);
                 } else {
-                    System.err.println("Logo image appears to be invalid (width <= 0)");
+                    System.err.println("ERROR: Logo image appears to be invalid (width <= 0)");
                 }
             }
         } catch (Exception e) {
-            System.err.println("Error loading logo: " + e.getMessage());
+            System.err.println("ERROR loading logo: " + e.getMessage());
             e.printStackTrace();
         }
 
@@ -140,25 +143,32 @@ public class EmployeeMainFrame extends JFrame {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         viewButton = new JButton("View Details");
         newButton = new JButton("New Employee");
+        adminPanelButton = new JButton("Admin Panel");
         
         // Style buttons
         Dimension buttonSize = new Dimension(120, 30);
         viewButton.setPreferredSize(buttonSize);
         newButton.setPreferredSize(buttonSize);
+        adminPanelButton.setPreferredSize(buttonSize);
         
         viewButton.addActionListener(e -> viewSelectedEmployee());
         newButton.addActionListener(e -> openNewEmployeeForm());
+        adminPanelButton.addActionListener(e -> openAdminPanel());
 
         buttonPanel.add(viewButton);
         buttonPanel.add(newButton);
+        buttonPanel.add(adminPanelButton);
 
         controlPanel.add(searchPanel, BorderLayout.WEST);
         controlPanel.add(buttonPanel, BorderLayout.EAST);
 
         // Add search functionality
         searchField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+            @Override
             public void changedUpdate(javax.swing.event.DocumentEvent e) { search(); }
+            @Override
             public void removeUpdate(javax.swing.event.DocumentEvent e) { search(); }
+            @Override
             public void insertUpdate(javax.swing.event.DocumentEvent e) { search(); }
         });
 
@@ -185,6 +195,11 @@ public class EmployeeMainFrame extends JFrame {
 
         employeeTable = new JTable(tableModel);
         employeeTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        employeeTable.setRowSelectionAllowed(true);
+        employeeTable.setDragEnabled(false);
+        // Prevent row reordering by drag and drop as well as switching columns
+        employeeTable.getTableHeader().setReorderingAllowed(false);
+
         employeeTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         employeeTable.setRowHeight(25);
         employeeTable.setIntercellSpacing(new Dimension(10, 5));
@@ -283,4 +298,10 @@ public class EmployeeMainFrame extends JFrame {
         NewEmployeeFrame newEmpFrame = new NewEmployeeFrame(this);
         newEmpFrame.setVisible(true);
     }
-} 
+
+    private void openAdminPanel() {
+        AdminPanelUI adminPanel = new AdminPanelUI(this);
+        adminPanel.setVisible(true);
+    }
+
+}

@@ -5,8 +5,7 @@
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import model.EmployeeDatabase;
-import view.EmployeeMainFrame;
+import view.LoginFrame; // Added import for LoginFrame
 
 public class Main {
     public static void main(String[] args) {
@@ -14,19 +13,18 @@ public class Main {
             // Set system look and feel
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             
-            // Load employees data
-            EmployeeDatabase.loadEmployees();
-            
-            // Start the application
+            // Start the login process
             SwingUtilities.invokeLater(() -> {
                 try {
-                    EmployeeMainFrame mainFrame = new EmployeeMainFrame();
-                    mainFrame.setVisible(true);
+                    LoginFrame loginFrame = new LoginFrame();
+                    loginFrame.setVisible(true);
                 } catch (Exception e) {
-                    showError("Failed to start application: " + e.getMessage());
+                    showError("Failed to start login screen: " + e.getMessage());
                 }
             });
-        } catch (Exception e) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException e) {
+            showError("Failed to set Look and Feel: " + e.getMessage());
+        } catch (Exception e) { // Catch any other unexpected errors during initialization
             showError("Failed to initialize application: " + e.getMessage());
         }
     }
