@@ -132,8 +132,8 @@ public class EmployeeMainFrame extends JFrame {
         JLabel searchLabel = new JLabel("Search:");
         searchLabel.setFont(new Font("SansSerif", Font.PLAIN, 12));
         
-        searchField = new JTextField(30);
-        searchField.setPreferredSize(new Dimension(250, 25));
+        searchField = new JTextField();
+        searchField.setPreferredSize(new Dimension(290, 25));
         searchField.setToolTipText("Search by name or employee number");
         
         searchPanel.add(searchLabel);
