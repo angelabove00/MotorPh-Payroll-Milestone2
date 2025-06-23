@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.*;
+import java.awt.event.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -34,6 +35,12 @@ public class LoginFrame extends JFrame {
         gbc.gridy = 0;
         usernameField = new JTextField(20);
         add(usernameField, gbc);
+        usernameField.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                    loginButton.doClick();
+                }
+        });
 
         // Password Label and Field
         gbc.gridx = 0;
@@ -44,6 +51,12 @@ public class LoginFrame extends JFrame {
         gbc.gridy = 1;
         passwordField = new JPasswordField(20);
         add(passwordField, gbc);
+        passwordField.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                    loginButton.doClick();
+                }
+        });
 
         // Login Button
         gbc.gridx = 0;
