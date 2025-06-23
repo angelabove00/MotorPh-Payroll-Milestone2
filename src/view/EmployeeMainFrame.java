@@ -151,6 +151,10 @@ public class EmployeeMainFrame extends JFrame {
         newButton.setPreferredSize(buttonSize);
         adminPanelButton.setPreferredSize(buttonSize);
         
+        viewButton.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        newButton.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        adminPanelButton.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        
         viewButton.addActionListener(e -> viewSelectedEmployee());
         newButton.addActionListener(e -> openNewEmployeeForm());
         adminPanelButton.addActionListener(e -> openAdminPanel());
