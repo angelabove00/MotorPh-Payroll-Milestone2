@@ -14,6 +14,7 @@ public class LoginFrame extends JFrame {
     private final JTextField usernameField;
     private final JPasswordField passwordField;
     private final JButton loginButton;
+    private final JButton resetButton;
     private final JLabel statusLabel;
 
     public LoginFrame() {
@@ -29,11 +30,13 @@ public class LoginFrame extends JFrame {
         // Username Label and Field
         gbc.gridx = 0;
         gbc.gridy = 0;
+        gbc.gridwidth = 1;
         add(new JLabel("Username:"), gbc);
 
         gbc.gridx = 1;
         gbc.gridy = 0;
-        usernameField = new JTextField(20);
+        gbc.gridwidth = 4;
+        usernameField = new JTextField(16);
         add(usernameField, gbc);
         usernameField.addActionListener(new ActionListener(){
             @Override
@@ -45,11 +48,13 @@ public class LoginFrame extends JFrame {
         // Password Label and Field
         gbc.gridx = 0;
         gbc.gridy = 1;
+        gbc.gridwidth = 1;
         add(new JLabel("Password:"), gbc);
 
         gbc.gridx = 1;
         gbc.gridy = 1;
-        passwordField = new JPasswordField(20);
+        gbc.gridwidth = 4;
+        passwordField = new JPasswordField(16);
         add(passwordField, gbc);
         passwordField.addActionListener(new ActionListener(){
             @Override
@@ -59,22 +64,31 @@ public class LoginFrame extends JFrame {
         });
 
         // Login Button
-        gbc.gridx = 0;
+        gbc.gridx = 1;
         gbc.gridy = 2;
-        gbc.gridwidth = 2;
+        gbc.gridwidth = 1;
         gbc.anchor = GridBagConstraints.CENTER;
         loginButton = new JButton("Login");
         add(loginButton, gbc);
+        
+        // Clear Text Fields Button
+        gbc.gridx = 3;
+        gbc.gridy = 2;
+        gbc.gridwidth = 1;
+        gbc.anchor = GridBagConstraints.CENTER;
+        resetButton = new JButton("Reset");
+        add(resetButton, gbc);
 
         // Status Label
         gbc.gridx = 0;
         gbc.gridy = 3;
-        gbc.gridwidth = 2;
+        gbc.gridwidth = 5;
         statusLabel = new JLabel(" ", SwingConstants.CENTER);
         statusLabel.setForeground(Color.RED);
         add(statusLabel, gbc);
 
         loginButton.addActionListener(_ -> authenticateUser());
+        resetButton.addActionListener(_ -> clearTexts());
     }
 
     private void authenticateUser() {
@@ -132,6 +146,11 @@ public class LoginFrame extends JFrame {
             statusLabel.setText("Invalid username or password.");
             statusLabel.setForeground(Color.RED);
         }
+    }
+    
+    private void clearTexts() {
+        usernameField.setText("");
+        passwordField.setText("");
     }
 
     public static void main(String[] args) {
