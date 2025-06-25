@@ -87,8 +87,18 @@ public class LoginFrame extends JFrame {
         statusLabel.setForeground(Color.RED);
         add(statusLabel, gbc);
 
-        loginButton.addActionListener(_ -> authenticateUser());
-        resetButton.addActionListener(_ -> clearTexts());
+        loginButton.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                authenticateUser();
+            }
+        });
+        resetButton.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                clearTexts();
+            }
+        });
     }
 
     private void authenticateUser() {
