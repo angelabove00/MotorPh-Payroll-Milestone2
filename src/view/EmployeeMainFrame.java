@@ -130,7 +130,7 @@ public class EmployeeMainFrame extends JFrame {
         // Search panel
         JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
         JLabel searchLabel = new JLabel("Search:");
-        searchLabel.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        searchLabel.setFont(UIConstants.LABEL_FONT);
         
         searchField = new JTextField();
         searchField.setPreferredSize(new Dimension(290, 25));
@@ -151,9 +151,9 @@ public class EmployeeMainFrame extends JFrame {
         newButton.setPreferredSize(buttonSize);
         adminPanelButton.setPreferredSize(buttonSize);
         
-        viewButton.setFont(new Font("SansSerif", Font.PLAIN, 12));
-        newButton.setFont(new Font("SansSerif", Font.PLAIN, 12));
-        adminPanelButton.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        viewButton.setFont(UIConstants.BUTTON_FONT);
+        newButton.setFont(UIConstants.BUTTON_FONT);
+        adminPanelButton.setFont(UIConstants.BUTTON_FONT);
         
         viewButton.addActionListener(e -> viewSelectedEmployee());
         newButton.addActionListener(e -> openNewEmployeeForm());
