@@ -55,15 +55,23 @@ public class EmployeeDetailFrame extends JFrame {
         addField(mainPanel, gbc, "Employee No.:", employee.getEmployeeNumber(), row++);
         addField(mainPanel, gbc, "First Name:", employee.getFirstName(), row++);
         addField(mainPanel, gbc, "Last Name:", employee.getLastName(), row++);
-        addField(mainPanel, gbc, "Position:", employee.getPosition(), row++);
-        addField(mainPanel, gbc, "Department:", employee.getDepartment(), row++);
-        addField(mainPanel, gbc, "Birthday:", employee.getBirthday().toString(), row++);
+        addField(mainPanel, gbc, "Birthday:", employee.getBirthday(), row++);
         addField(mainPanel, gbc, "Contact No.:", employee.getContactInfo(), row++);
+        addField(mainPanel, gbc, "Address:", employee.getAddress(), row++);
+        addField(mainPanel, gbc, "Employee Status:", employee.getStatus(), row++);        
+        addField(mainPanel, gbc, "Position:", employee.getPosition(), row++);
+        addField(mainPanel, gbc, "Direct Supervisor:", employee.getSupervisor(), row++);
         addField(mainPanel, gbc, "SSS No.:", employee.getSssNumber(), row++);
         addField(mainPanel, gbc, "PhilHealth No.:", employee.getPhilhealthNumber(), row++);
         addField(mainPanel, gbc, "TIN:", employee.getTinNumber(), row++);
         addField(mainPanel, gbc, "Pag-IBIG No.:", employee.getPagibigNumber(), row++);
-
+        addField(mainPanel, gbc, "Basic Salary:", employee.getBaseSalary(), row++);
+        addField(mainPanel, gbc, "Rice Subsidy:", employee.getRiceSubsidy(), row++);
+        addField(mainPanel, gbc, "Phone Allowance:", employee.getPhoneAllowance(), row++);
+        addField(mainPanel, gbc, "Clothing Allowance:", employee.getClothingAllowance(), row++);
+        addField(mainPanel, gbc, "Gross Semi-monthly Rate:", employee.getSemiRate(), row++);
+        addField(mainPanel, gbc, "Hourly Rate:", employee.getHourlyRate(), row++);
+        
         // Add separator
         addSeparator(mainPanel, gbc, row++);
 
@@ -161,4 +169,4 @@ public class EmployeeDetailFrame extends JFrame {
                 JOptionPane.ERROR_MESSAGE);
         }
     }
-} 
+}
