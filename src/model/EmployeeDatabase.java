@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EmployeeDatabase {
-    private static final String CSV_FILE = "src/resources/employees.csv";
-    private static List<Employee> employees = new ArrayList<>();
+    private static final String CSV_FILE = "src/resources/employee.csv";
+    private static final List<Employee> employees = new ArrayList<>();
     private static boolean isInitialized = false;
 
     public static void initialize() {
@@ -56,8 +56,8 @@ public class EmployeeDatabase {
                     continue;
                 }
                 try {
-                    String[] parts = line.split(",");
-                    if (parts.length < 11) continue;
+                    String[] parts = line.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
+                    if (parts.length < 19) continue;
 
                     Employee emp = new Employee(
                         parts[0].trim(),
@@ -66,11 +66,19 @@ public class EmployeeDatabase {
                         parts[3].trim(),
                         parts[4].trim(),
                         parts[5].trim(),
-                        LocalDate.parse(parts[6].trim()),
+                        parts[6].trim(),
                         parts[7].trim(),
                         parts[8].trim(),
                         parts[9].trim(),
-                        parts[10].trim()
+                        parts[10].trim(),
+                        parts[11].trim(),
+                        parts[12].trim(),
+                        parts[13].trim(),
+                        parts[14].trim(),
+                        parts[15].trim(),
+                        parts[16].trim(),
+                        parts[17].trim(),
+                        parts[18].trim()
                     );
                     employees.add(emp);
                 } catch (Exception e) {
@@ -87,22 +95,30 @@ public class EmployeeDatabase {
     private static void saveEmployees() {
         try (PrintWriter writer = new PrintWriter(new FileWriter(CSV_FILE))) {
             // Write header
-            writer.println("Employee Number,First Name,Last Name,Contact Info,Position,Department,Birthday,SSS Number,PhilHealth Number,TIN,Pag-IBIG Number");
+            writer.println("Employee #,Last Name,First Name,Birthday,Address,Phone Number,SSS #,Philhealth #,TIN #,Pag-ibig #,Status,Position,Immediate Supervisor,Basic Salary,Rice Subsidy,Phone Allowance,Clothing Allowance,Gross Semi-monthly Rate,Hourly Rate");
             
             // Write employees
             for (Employee emp : employees) {
-                writer.printf("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n",
+                writer.printf("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n",
                     emp.getEmployeeNumber(),
                     emp.getFirstName(),
                     emp.getLastName(),
-                    emp.getContactInfo(),
-                    emp.getPosition(),
-                    emp.getDepartment(),
                     emp.getBirthday(),
+                    emp.getAddress(),
+                    emp.getContactInfo(),
                     emp.getSssNumber(),
                     emp.getPhilhealthNumber(),
                     emp.getTinNumber(),
-                    emp.getPagibigNumber()
+                    emp.getPagibigNumber(),
+                    emp.getStatus(),
+                    emp.getPosition(),
+                    emp.getSupervisor(),
+                    emp.getBaseSalary(),
+                    emp.getRiceSubsidy(),
+                    emp.getPhoneAllowance(),
+                    emp.getClothingAllowance(),
+                    emp.getSemiRate(),
+                    emp.getHourlyRate()
                 );
             }
         } catch (IOException e) {
@@ -127,4 +143,4 @@ public class EmployeeDatabase {
             saveEmployees();
         }
     }
-} 
+}
