@@ -9,7 +9,27 @@ import model.Employee;
 import model.EmployeeDatabase;
 
 public class AdminPanelUI extends JFrame {
-    private JTextField employeeNoField, firstNameField, lastNameField, contactField, positionField, departmentField, birthdayField, sssField, philhealthField, tinField, pagibigField;
+    private final JTextField 
+                        employeeNoField, 
+                        lastNameField, 
+                        firstNameField, 
+                        birthdayField, 
+                        addressField, 
+                        contactField, 
+                        sssField, 
+                        philhealthField, 
+                        tinField, 
+                        pagibigField, 
+                        statusField, 
+                        positionField, 
+                        bossField, 
+                        basesalaryField, 
+                        ricesubField, 
+                        phoneallowField, 
+                        clothingallowField, 
+                        grossemiField, 
+                        hourrateField;
+
     private JTable employeeTable;
     private DefaultTableModel tableModel;
     private JButton updateButton, deleteButton;
@@ -19,13 +39,34 @@ public class AdminPanelUI extends JFrame {
     public AdminPanelUI(EmployeeMainFrame parentFrame) {
         this.parentFrame = parentFrame;
         setTitle("Admin Panel");
-        setSize(1100, 500);
+        setSize(1280, 720);
+        setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
 
-        // Table
-        String[] columns = {"Employee No.", "Last Name", "First Name", "Contact", "Position", "Department", "Birthday", "SSS", "PhilHealth", "TIN", "Pag-IBIG"};
+        // Employee Data Table
+        String[] columns = {
+            "Employee #",
+            "Last Name",
+            "First Name",
+            "Birthday",
+            "Address",
+            "Phone Number",
+            "SSS #",
+            "Philhealth #",
+            "TIN #",
+            "Pag-ibig #",
+            "Status",
+            "Position",
+            "Immediate Supervisor",
+            "Basic Salary",
+            "Rice Subsidy",
+            "Phone Allowance",
+            "Clothing Allowance",
+            "Gross Semi-monthly Rate",
+            "Hourly Rate"
+        };
         tableModel = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int col) { return false; }
@@ -33,11 +74,12 @@ public class AdminPanelUI extends JFrame {
         employeeTable = new JTable(tableModel);
         employeeTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         employeeTable.setRowSelectionAllowed(true);
+        // Prevent row drag and dropping
         employeeTable.setDragEnabled(false);
         // Prevent row reordering by drag-and-drop
         employeeTable.getTableHeader().setReorderingAllowed(false);
         JScrollPane tableScroll = new JScrollPane(employeeTable);
-        tableScroll.setPreferredSize(new Dimension(700, 400));
+        tableScroll.setPreferredSize(new Dimension(900, 400));
         refreshTable();
 
         // Form panel
@@ -50,26 +92,43 @@ public class AdminPanelUI extends JFrame {
         // Helper to add label+field
         employeeNoField = new JTextField(15); employeeNoField.setEditable(false);
         addFormRow(formPanel, gbc, 0, "Employee No. (read-only):", employeeNoField);
-        firstNameField = new JTextField(15);
-        addFormRow(formPanel, gbc, 1, "First Name:", firstNameField);
         lastNameField = new JTextField(15);
-        addFormRow(formPanel, gbc, 2, "Last Name:", lastNameField);
-        contactField = new JTextField(15);
-        addFormRow(formPanel, gbc, 3, "Contact:", contactField);
-        positionField = new JTextField(15);
-        addFormRow(formPanel, gbc, 4, "Position:", positionField);
-        departmentField = new JTextField(15);
-        addFormRow(formPanel, gbc, 5, "Department:", departmentField);
+        addFormRow(formPanel, gbc, 1, "Last Name:", lastNameField);
+        firstNameField = new JTextField(15);
+        addFormRow(formPanel, gbc, 2, "First Name:", firstNameField);
+        //based on motorph website employee csv, the format they use is sample: 06/19/1988 -or- mm/dd/yyyy
         birthdayField = new JTextField(15);
-        addFormRow(formPanel, gbc, 6, "Birthday (yyyy-mm-dd):", birthdayField);
+        addFormRow(formPanel, gbc, 3, "Birthday (mm/dd/yyyy):", birthdayField);
+        addressField = new JTextField(15);
+        addFormRow(formPanel, gbc, 4, "Address:", addressField);
+        contactField = new JTextField(15);
+        addFormRow(formPanel, gbc, 5, "Contact:", contactField);
         sssField = new JTextField(15);
-        addFormRow(formPanel, gbc, 7, "SSS No.:", sssField);
+        addFormRow(formPanel, gbc, 6, "SSS No.:", sssField);
         philhealthField = new JTextField(15);
-        addFormRow(formPanel, gbc, 8, "PhilHealth No.:", philhealthField);
+        addFormRow(formPanel, gbc, 7, "PhilHealth No.:", philhealthField);
         tinField = new JTextField(15);
-        addFormRow(formPanel, gbc, 9, "TIN:", tinField);
+        addFormRow(formPanel, gbc, 8, "TIN:", tinField);
         pagibigField = new JTextField(15);
-        addFormRow(formPanel, gbc, 10, "Pag-IBIG No.:", pagibigField);
+        addFormRow(formPanel, gbc, 9, "Pag-IBIG No.:", pagibigField);
+        statusField = new JTextField(15);
+        addFormRow(formPanel, gbc, 10, "Employee Status:", statusField);
+        positionField = new JTextField(15);
+        addFormRow(formPanel, gbc, 11, "Position:", positionField);
+        bossField = new JTextField(15);
+        addFormRow(formPanel, gbc, 12, "Direct Supervisor:", bossField);
+        basesalaryField = new JTextField(15);
+        addFormRow(formPanel, gbc, 13, "Base Salary:", basesalaryField);
+        ricesubField = new JTextField(15);
+        addFormRow(formPanel, gbc, 14, "Rice Subsidy:", ricesubField);
+        phoneallowField = new JTextField(15);
+        addFormRow(formPanel, gbc, 15, "Phone Allowance:", phoneallowField);
+        clothingallowField = new JTextField(15);
+        addFormRow(formPanel, gbc, 16, "Clothing Allowance:", clothingallowField);
+        grossemiField = new JTextField(15);
+        addFormRow(formPanel, gbc, 17, "Gross Semi-monthly Rate:", grossemiField);
+        hourrateField = new JTextField(15);
+        addFormRow(formPanel, gbc, 18, "Hourly Rate:", hourrateField);
 
         // Buttons
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
@@ -79,7 +138,7 @@ public class AdminPanelUI extends JFrame {
         deleteButton.setEnabled(false);
         buttonPanel.add(updateButton);
         buttonPanel.add(deleteButton);
-        gbc.gridx = 0; gbc.gridy = 11; gbc.gridwidth = 2;
+        gbc.gridx = 0; gbc.gridy = 19; gbc.gridwidth = 2;
         formPanel.add(buttonPanel, gbc);
 
         // Layout: table left, form right
@@ -173,52 +232,96 @@ public class AdminPanelUI extends JFrame {
         List<Employee> employees = EmployeeDatabase.getEmployees();
         for (Employee emp : employees) {
             tableModel.addRow(new Object[] {
-                emp.getEmployeeNumber(), emp.getLastName(), emp.getFirstName(), emp.getContactInfo(), emp.getPosition(), emp.getDepartment(), emp.getBirthday().toString(), emp.getSssNumber(), emp.getPhilhealthNumber(), emp.getTinNumber(), emp.getPagibigNumber()
-            });
+                    emp.getEmployeeNumber(), 
+                    emp.getLastName(), 
+                    emp.getFirstName(), 
+                    emp.getBirthday(), 
+                    emp.getAddress(), 
+                    emp.getContactInfo(), 
+                    emp.getSssNumber(), 
+                    emp.getPhilhealthNumber(), 
+                    emp.getTinNumber(), 
+                    emp.getPagibigNumber(), 
+                    emp.getStatus(), 
+                    emp.getPosition(), 
+                    emp.getSupervisor(), 
+                    emp.getBaseSalary(), 
+                    emp.getRiceSubsidy(), 
+                    emp.getPhoneAllowance(), 
+                    emp.getClothingAllowance(), 
+                    emp.getSemiRate(), 
+                    emp.getHourlyRate()
+
+                }
+            );
         }
     }
 
     private void populateFields(Employee emp) {
         employeeNoField.setText(emp.getEmployeeNumber());
-        firstNameField.setText(emp.getFirstName());
         lastNameField.setText(emp.getLastName());
+        firstNameField.setText(emp.getFirstName());
+        birthdayField.setText(emp.getBirthday());
+        addressField.setText(emp.getAddress());
         contactField.setText(emp.getContactInfo());
-        positionField.setText(emp.getPosition());
-        departmentField.setText(emp.getDepartment());
-        birthdayField.setText(emp.getBirthday().toString());
         sssField.setText(emp.getSssNumber());
         philhealthField.setText(emp.getPhilhealthNumber());
         tinField.setText(emp.getTinNumber());
         pagibigField.setText(emp.getPagibigNumber());
+        statusField.setText(emp.getStatus());
+        positionField.setText(emp.getPosition());
+        bossField.setText(emp.getSupervisor());
+        basesalaryField.setText(emp.getBaseSalary());
+        ricesubField.setText(emp.getRiceSubsidy());
+        phoneallowField.setText(emp.getPhoneAllowance());
+        clothingallowField.setText(emp.getClothingAllowance());
+        grossemiField.setText(emp.getSemiRate());
+        hourrateField.setText(emp.getHourlyRate());
     }
 
     private void clearFields() {
         employeeNoField.setText("");
-        firstNameField.setText("");
         lastNameField.setText("");
-        contactField.setText("");
-        positionField.setText("");
-        departmentField.setText("");
+        firstNameField.setText("");
         birthdayField.setText("");
+        addressField.setText("");
+        contactField.setText("");
         sssField.setText("");
         philhealthField.setText("");
         tinField.setText("");
         pagibigField.setText("");
+        statusField.setText("");
+        positionField.setText("");
+        bossField.setText("");
+        basesalaryField.setText("");
+        ricesubField.setText("");
+        phoneallowField.setText("");
+        clothingallowField.setText("");
+        grossemiField.setText("");
+        hourrateField.setText("");
     }
 
     private Employee getEmployeeFromFields() {
         return new Employee(
             employeeNoField.getText().trim(),
-            firstNameField.getText().trim(),
             lastNameField.getText().trim(),
+            firstNameField.getText().trim(),
+            birthdayField.getText().trim(),
+            addressField.getText().trim(),
             contactField.getText().trim(),
-            positionField.getText().trim(),
-            departmentField.getText().trim(),
-            LocalDate.parse(birthdayField.getText().trim()),
             sssField.getText().trim(),
             philhealthField.getText().trim(),
             tinField.getText().trim(),
-            pagibigField.getText().trim()
+            pagibigField.getText().trim(),
+            statusField.getText().trim(),
+            positionField.getText().trim(),
+            bossField.getText().trim(),
+            basesalaryField.getText().trim(),
+            ricesubField.getText().trim(),
+            phoneallowField.getText().trim(),
+            clothingallowField.getText().trim(),
+            grossemiField.getText().trim(),
+            hourrateField.getText().trim()
         );
     }
 }
