@@ -32,7 +32,7 @@ public class LoginFrame extends JFrame {
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 1;
-        add(new JLabel("Username:"), gbc);
+        add(new JLabel("Employee ID:"), gbc);
 
         gbc.gridx = 1;
         gbc.gridy = 0;
@@ -154,7 +154,7 @@ public class LoginFrame extends JFrame {
                 }
             });
         } else {
-            statusLabel.setText("Invalid username or password.");
+            statusLabel.setText("Invalid Employee ID or Password.");
             statusLabel.setForeground(Color.RED);
         }
     }
