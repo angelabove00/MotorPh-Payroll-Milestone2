@@ -10,16 +10,25 @@ import model.EmployeeDatabase;
 
 public class NewEmployeeFrame extends JFrame {
     private final EmployeeMainFrame parentFrame;
-    private final JTextField employeeNoField;
-    private final JTextField firstNameField;
-    private final JTextField lastNameField;
-    private final JTextField contactNoField;
-    private final JTextField positionField;
-    private final JTextField departmentField;
-    private final JTextField sssNoField;
-    private final JTextField philhealthNoField;
-    private final JTextField tinField;
-    private final JTextField pagibigNoField;
+    private final JTextField 
+                        employeeNoField, 
+                        lastNameField, 
+                        firstNameField, 
+                        addressField, 
+                        contactField, 
+                        sssField, 
+                        philhealthField, 
+                        tinField, 
+                        pagibigField, 
+                        statusField, 
+                        positionField, 
+                        bossField, 
+                        basesalaryField, 
+                        ricesubField, 
+                        phoneallowField, 
+                        clothingallowField, 
+                        grossemiField, 
+                        hourrateField;
     private final JSpinner yearSpinner;
     private final JSpinner monthSpinner;
     private final JSpinner daySpinner;
@@ -53,15 +62,23 @@ public class NewEmployeeFrame extends JFrame {
 
         // Initialize fields
         employeeNoField = createField("Enter employee number");
-        firstNameField = createField("Enter first name");
         lastNameField = createField("Enter last name");
-        contactNoField = createField("Format: 09XXXXXXXXX");
-        positionField = createField("Enter position");
-        departmentField = createField("Enter department");
-        sssNoField = createField("Format: XX-XXXXXXX-X");
-        philhealthNoField = createField("Format: XX-XXXXXXXXX-X");
+        firstNameField = createField("Enter first name");
+        addressField = createField("Enter employee's address");
+        contactField = createField("Format: 09XXXXXXXXX");
+        sssField = createField("Format: XX-XXXXXXX-X");
+        philhealthField = createField("Format: XX-XXXXXXXXX-X");
         tinField = createField("Format: XXX-XXX-XXX");
-        pagibigNoField = createField("Format: XXXX-XXXX-XXXX");
+        pagibigField = createField("Format: XXXX-XXXX-XXXX");
+        statusField = createField("Enter employee status");
+        positionField = createField("Enter employee's position");
+        bossField = createField("Enter direct supervisor");
+        basesalaryField = createField("Input base salary");
+        ricesubField = createField("Input rice subsidy");
+        phoneallowField = createField("Input phone allowance");
+        clothingallowField = createField("Input clothing allowance");
+        grossemiField = createField("Enter gross semi-monthly rate");
+        hourrateField = createField("Input hourly rate");
 
         // Date spinners
         LocalDate now = LocalDate.now();
@@ -87,15 +104,26 @@ public class NewEmployeeFrame extends JFrame {
         // Add fields in specified order
         int row = 0;
         addField(formPanel, gbc, "Employee No.:", employeeNoField, row++);
-        addField(formPanel, gbc, "First Name:", firstNameField, row++);
         addField(formPanel, gbc, "Last Name:", lastNameField, row++);
-        addField(formPanel, gbc, "Contact No.:", contactNoField, row++);
-        addField(formPanel, gbc, "Position:", positionField, row++);
-        addField(formPanel, gbc, "Department:", departmentField, row++);
-        addField(formPanel, gbc, "SSS No.:", sssNoField, row++);
-        addField(formPanel, gbc, "PhilHealth No.:", philhealthNoField, row++);
+        addField(formPanel, gbc, "First Name:", firstNameField, row++);
+        addField(formPanel, gbc, "Address:", addressField, row++);
+        addField(formPanel, gbc, "Contact No.:", contactField, row++);
+        
+        addField(formPanel, gbc, "SSS No.:", sssField, row++);
+        addField(formPanel, gbc, "PhilHealth No.:", philhealthField, row++);
         addField(formPanel, gbc, "TIN:", tinField, row++);
-        addField(formPanel, gbc, "Pag-IBIG No.:", pagibigNoField, row++);
+        addField(formPanel, gbc, "Pag-IBIG No.:", pagibigField, row++);  
+
+        addField(formPanel, gbc, "Status:", statusField, row++);
+        addField(formPanel, gbc, "Position:", positionField, row++);
+        addField(formPanel, gbc, "Supervisor:", bossField, row++);
+
+        addField(formPanel, gbc, "Base Salary:", basesalaryField, row++);
+        addField(formPanel, gbc, "Rice Subsidy:", ricesubField, row++);
+        addField(formPanel, gbc, "Phone Allowance:", phoneallowField, row++);
+        addField(formPanel, gbc, "Clothing Allowance:", clothingallowField, row++);
+        addField(formPanel, gbc, "Gross Semi Monthly Rate:", grossemiField, row++);
+        addField(formPanel, gbc, "Hourly Rate:", hourrateField, row++);
 
         // Add birthday spinners
         JPanel datePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
@@ -174,16 +202,28 @@ public class NewEmployeeFrame extends JFrame {
 
     private boolean validateFields() {
         // Check if required fields are empty
-        if (employeeNoField.getText().trim().isEmpty() ||
-            firstNameField.getText().trim().isEmpty() ||
-            lastNameField.getText().trim().isEmpty() ||
-            contactNoField.getText().trim().isEmpty() ||
-            positionField.getText().trim().isEmpty() ||
-            departmentField.getText().trim().isEmpty() ||
-            sssNoField.getText().trim().isEmpty() ||
-            philhealthNoField.getText().trim().isEmpty() ||
-            tinField.getText().trim().isEmpty() ||
-            pagibigNoField.getText().trim().isEmpty()) {
+        if (
+                employeeNoField.getText().trim().isEmpty() ||
+                firstNameField.getText().trim().isEmpty() ||
+                lastNameField.getText().trim().isEmpty() ||
+                addressField.getText().trim().isEmpty() ||
+                contactField.getText().trim().isEmpty() ||
+
+                statusField.getText().trim().isEmpty() ||
+                positionField.getText().trim().isEmpty() ||
+                bossField.getText().trim().isEmpty() ||
+
+                basesalaryField.getText().trim().isEmpty() ||
+                ricesubField.getText().trim().isEmpty() ||
+                phoneallowField.getText().trim().isEmpty() ||
+                clothingallowField.getText().trim().isEmpty() ||
+                grossemiField.getText().trim().isEmpty() ||
+                hourrateField.getText().trim().isEmpty() ||
+
+                sssField.getText().trim().isEmpty() ||
+                philhealthField.getText().trim().isEmpty() ||
+                tinField.getText().trim().isEmpty() ||
+                pagibigField.getText().trim().isEmpty()) {
             
             showError(Constants.REQUIRED_FIELDS_ERROR);
             return false;
@@ -197,21 +237,21 @@ public class NewEmployeeFrame extends JFrame {
         }
 
         // Validate patterns
-        if (!Pattern.matches(Constants.CONTACT_NUMBER_PATTERN, contactNoField.getText().trim())) {
+        if (!Pattern.matches(Constants.CONTACT_NUMBER_PATTERN, contactField.getText().trim())) {
             showError(Constants.INVALID_CONTACT_ERROR);
-            contactNoField.requestFocus();
+            contactField.requestFocus();
             return false;
         }
 
-        if (!Pattern.matches(Constants.SSS_NUMBER_PATTERN, sssNoField.getText().trim())) {
+        if (!Pattern.matches(Constants.SSS_NUMBER_PATTERN, sssField.getText().trim())) {
             showError(Constants.INVALID_SSS_ERROR);
-            sssNoField.requestFocus();
+            sssField.requestFocus();
             return false;
         }
 
-        if (!Pattern.matches(Constants.PHILHEALTH_NUMBER_PATTERN, philhealthNoField.getText().trim())) {
+        if (!Pattern.matches(Constants.PHILHEALTH_NUMBER_PATTERN, philhealthField.getText().trim())) {
             showError(Constants.INVALID_PHILHEALTH_ERROR);
-            philhealthNoField.requestFocus();
+            philhealthField.requestFocus();
             return false;
         }
 
@@ -221,9 +261,9 @@ public class NewEmployeeFrame extends JFrame {
             return false;
         }
 
-        if (!Pattern.matches(Constants.PAGIBIG_NUMBER_PATTERN, pagibigNoField.getText().trim())) {
+        if (!Pattern.matches(Constants.PAGIBIG_NUMBER_PATTERN, pagibigField.getText().trim())) {
             showError(Constants.INVALID_PAGIBIG_ERROR);
-            pagibigNoField.requestFocus();
+            pagibigField.requestFocus();
             return false;
         }
 
@@ -244,16 +284,27 @@ public class NewEmployeeFrame extends JFrame {
 
             Employee newEmployee = new Employee(
                 employeeNoField.getText().trim(),
-                firstNameField.getText().trim(),
                 lastNameField.getText().trim(),
-                contactNoField.getText().trim(),
-                positionField.getText().trim(),
-                departmentField.getText().trim(),
-                birthday,
-                sssNoField.getText().trim(),
-                philhealthNoField.getText().trim(),
+                firstNameField.getText().trim(),
+                birthday.toString(),
+                addressField.getText().trim(),
+                contactField.getText().trim(),
+
+                sssField.getText().trim(),
+                philhealthField.getText().trim(),
                 tinField.getText().trim(),
-                pagibigNoField.getText().trim()
+                pagibigField.getText().trim(),
+
+                statusField.getText().trim(),
+                positionField.getText().trim(),
+                bossField.getText().trim(),
+
+                basesalaryField.getText().trim(),
+                ricesubField.getText().trim(),
+                phoneallowField.getText().trim(),
+                clothingallowField.getText().trim(),
+                grossemiField.getText().trim(),
+                hourrateField.getText().trim()
             );
 
             EmployeeDatabase.addEmployee(newEmployee);
@@ -294,4 +345,4 @@ public class NewEmployeeFrame extends JFrame {
             daySpinner.setValue(daysInMonth);
         }
     }
-} 
+}
