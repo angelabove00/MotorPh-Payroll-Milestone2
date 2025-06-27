@@ -20,6 +20,7 @@ public class LoginFrame extends JFrame {
     public LoginFrame() {
         setTitle("MotorPH Employee App Login");
         setSize(400, 250);
+        setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // Center the window
         setLayout(new GridBagLayout());
