@@ -1,20 +1,29 @@
 package view;
 
 import java.awt.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.Month;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import javax.swing.*;
-import model.Constants;
 import model.Employee;
-import service.PayrollService;
-import service.PayrollService.PayrollResult;
 
 public class EmployeeDetailFrame extends JFrame {
     private final Employee employee;
     private JComboBox<Month> monthSelector;
-    private JSpinner hoursSpinner;
-    private JSpinner overtimeSpinner;
-    private JSpinner bonusSpinner;
-    private JSpinner loansSpinner;
+    private JLabel totalPayLabel; // Label to display total pay
+
+    private static final String ATTENDANCE_CSV_PATH = "src/resources/attendance.csv";
+    private static final double ATTENDANCE_HOURLY_RATE = 500.0;
+    private static final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofPattern("H:mm");
+
+    private JButton clockInButton;
+    private JButton clockOutButton;
 
     public EmployeeDetailFrame(Employee employee) {
         if (employee == null) {
@@ -26,21 +35,9 @@ public class EmployeeDetailFrame extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        // Initialize spinners
+        // Initialize month selector only
         monthSelector = new JComboBox<>(Month.values());
         monthSelector.setSelectedItem(Month.valueOf(java.time.LocalDate.now().getMonth().name()));
-        
-        hoursSpinner = new JSpinner(new SpinnerNumberModel(Constants.STANDARD_HOURS_PER_MONTH, 0.0, 350.0, 1.0));
-        hoursSpinner.setEditor(new JSpinner.NumberEditor(hoursSpinner, "#,##0.0"));
-        
-        overtimeSpinner = new JSpinner(new SpinnerNumberModel(0.0, 0.0, 350.0, 1.0));
-        overtimeSpinner.setEditor(new JSpinner.NumberEditor(overtimeSpinner, "#,##0.0"));
-        
-        bonusSpinner = new JSpinner(new SpinnerNumberModel(0.0, 0.0, 100000.0, 500.0));
-        bonusSpinner.setEditor(new JSpinner.NumberEditor(bonusSpinner, "#,##0.00"));
-        
-        loansSpinner = new JSpinner(new SpinnerNumberModel(0.0, 0.0, 100000.0, 500.0));
-        loansSpinner.setEditor(new JSpinner.NumberEditor(loansSpinner, "#,##0.00"));
 
         // Create main panel
         JPanel mainPanel = new JPanel(new GridBagLayout());
@@ -92,23 +89,37 @@ public class EmployeeDetailFrame extends JFrame {
         mainPanel.add(monthSelector, gbc);
         row++;
 
-        // Add spinners
-        addSpinner(mainPanel, gbc, "Hours Worked:", hoursSpinner, row++);
-        addSpinner(mainPanel, gbc, "Overtime Hours:", overtimeSpinner, row++);
-        addSpinner(mainPanel, gbc, "Bonus:", bonusSpinner, row++);
-        addSpinner(mainPanel, gbc, "Loans/Deductions:", loansSpinner, row++);
-
-        // Add compute button
-        JButton computeButton = new JButton("Compute Payroll");
-        computeButton.addActionListener(e -> computePayroll());
+        // Add total pay label below payroll fields
+        totalPayLabel = new JLabel();
+        totalPayLabel.setFont(UIConstants.LABEL_FONT);
         gbc.gridx = 0;
-        gbc.gridy = row;
+        gbc.gridy = row++;
         gbc.gridwidth = 2;
-        gbc.anchor = GridBagConstraints.CENTER;
-        mainPanel.add(computeButton, gbc);
+        mainPanel.add(totalPayLabel, gbc);
+        gbc.gridwidth = 1;
+
+        // Add Clock In and Clock Out buttons
+        JPanel clockPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        clockInButton = new JButton("Clock In");
+        clockOutButton = new JButton("Clock Out");
+        clockPanel.add(clockInButton);
+        clockPanel.add(clockOutButton);
+        gbc.gridx = 0;
+        gbc.gridy = row++;
+        gbc.gridwidth = 2;
+        mainPanel.add(clockPanel, gbc);
+        gbc.gridwidth = 1;
 
         // Add the main panel to a scroll pane
         add(new JScrollPane(mainPanel));
+
+        // Update total pay on window open and when month changes
+        updateTotalPay();
+        monthSelector.addActionListener(e -> updateTotalPay());
+
+        // Add button actions
+        clockInButton.addActionListener(e -> handleClockIn());
+        clockOutButton.addActionListener(e -> handleClockOut());
     }
 
     private void addField(JPanel panel, GridBagConstraints gbc, String label, String value, int row) {
@@ -127,19 +138,6 @@ public class EmployeeDetailFrame extends JFrame {
         panel.add(valueComponent, gbc);
     }
 
-    private void addSpinner(JPanel panel, GridBagConstraints gbc, String label, JSpinner spinner, int row) {
-        JLabel labelComponent = new JLabel(label);
-        labelComponent.setFont(UIConstants.LABEL_FONT);
-        
-        gbc.gridx = 0;
-        gbc.gridy = row;
-        gbc.gridwidth = 1;
-        panel.add(labelComponent, gbc);
-
-        gbc.gridx = 1;
-        panel.add(spinner, gbc);
-    }
-
     private void addSeparator(JPanel panel, GridBagConstraints gbc, int row) {
         gbc.gridx = 0;
         gbc.gridy = row;
@@ -149,24 +147,114 @@ public class EmployeeDetailFrame extends JFrame {
         gbc.insets = new Insets(5, 5, 5, 5);
     }
 
-    private void computePayroll() {
-        try {
-            PayrollResult result = PayrollService.computePayroll(
-                employee,
-                (Month) monthSelector.getSelectedItem(),
-                ((Number) hoursSpinner.getValue()).doubleValue(),
-                ((Number) overtimeSpinner.getValue()).doubleValue(),
-                ((Number) bonusSpinner.getValue()).doubleValue(),
-                ((Number) loansSpinner.getValue()).doubleValue()
-            );
+    // Add this method to compute and display total pay from attendance.csv
+    private void updateTotalPay() {
+        double totalPay = 0.0;
+        String empNum = employee.getEmployeeNumber();
+        Month selectedMonth = (Month) monthSelector.getSelectedItem();
+        try (BufferedReader br = new BufferedReader(new FileReader(ATTENDANCE_CSV_PATH))) {
+            String line = br.readLine(); // skip header
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length < 6) continue;
+                String recordEmpNum = parts[0].trim();
+                String dateStr = parts[3].trim();
+                String logInStr = parts[4].trim();
+                String logOutStr = parts[5].trim();
+                if (!recordEmpNum.equals(empNum)) continue;
+                java.time.LocalDate date = java.time.LocalDate.parse(dateStr, java.time.format.DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+                if (date.getMonth() != selectedMonth) continue;
+                LocalTime logIn = LocalTime.parse(logInStr, TIME_FORMAT);
+                LocalTime logOut = LocalTime.parse(logOutStr, TIME_FORMAT);
+                double hoursWorked = java.time.Duration.between(logIn, logOut).toMinutes() / 60.0;
+                if (hoursWorked < 0) hoursWorked = 0; // safety
+                totalPay += hoursWorked * ATTENDANCE_HOURLY_RATE;
+            }
+        } catch (Exception ex) {
+            totalPayLabel.setText("Total Pay (Attendance): Error reading attendance");
+            return;
+        }
+        totalPayLabel.setText(String.format(Locale.US, "Total Pay (Attendance): PHP %,.2f", totalPay));
+    }
 
-            PayslipFrame payslipFrame = new PayslipFrame(employee, result, (Month) monthSelector.getSelectedItem());
-            payslipFrame.setVisible(true);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this,
-                "Error computing payroll: " + e.getMessage(),
-                "Error",
-                JOptionPane.ERROR_MESSAGE);
+    private void handleClockIn() {
+        LocalDate today = LocalDate.now();
+        String empNum = employee.getEmployeeNumber();
+        boolean alreadyClockedIn = false;
+        try (BufferedReader br = new BufferedReader(new FileReader(ATTENDANCE_CSV_PATH))) {
+            String line = br.readLine(); // skip header
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length < 6) continue;
+                if (parts[0].trim().equals(empNum) && parts[3].trim().equals(today.format(java.time.format.DateTimeFormatter.ofPattern("MM/dd/yyyy")))) {
+                    alreadyClockedIn = true;
+                    break;
+                }
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error reading attendance file.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (alreadyClockedIn) {
+            JOptionPane.showMessageDialog(this, "You have already clocked in today.", "Info", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        try (PrintWriter pw = new PrintWriter(new FileWriter(ATTENDANCE_CSV_PATH, true))) {
+            String now = LocalTime.now().format(TIME_FORMAT);
+            String todayStr = today.format(java.time.format.DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+            String[] row = {empNum, employee.getLastName(), employee.getFirstName(), todayStr, now, ""};
+            pw.println(String.join(",", row));
+            JOptionPane.showMessageDialog(this, "Clock In successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error writing to attendance file.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void handleClockOut() {
+        LocalDate today = LocalDate.now();
+        String empNum = employee.getEmployeeNumber();
+        String todayStr = today.format(java.time.format.DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+        boolean found = false;
+        java.util.List<String> lines = new java.util.ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(ATTENDANCE_CSV_PATH))) {
+            String header = br.readLine();
+            lines.add(header);
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split(",", -1); // keep trailing empty fields
+                if (parts.length < 6) {
+                            if (parts.length == 5) {
+                        String[] newParts = new String[6];
+                        System.arraycopy(parts, 0, newParts, 0, 5);
+                        newParts[5] = "";
+                        parts = newParts;
+                    } else {
+                        lines.add(line);
+                        continue;
+                    }
+                }
+                if (!found && parts[0].trim().equals(empNum) && parts[3].trim().equals(todayStr) && parts[5].trim().isEmpty()) {
+                    // Fill in clock out
+                    parts[5] = LocalTime.now().format(TIME_FORMAT);
+                    found = true;
+                    lines.add(String.join(",", parts));
+                } else {
+                    lines.add(String.join(",", parts));
+                }
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error reading attendance file.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (!found) {
+            JOptionPane.showMessageDialog(this, "No Clock In found for today or already clocked out.", "Info", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        try (PrintWriter pw = new PrintWriter(new FileWriter(ATTENDANCE_CSV_PATH))) {
+            for (String l : lines) pw.println(l);
+            JOptionPane.showMessageDialog(this, "Clock Out successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error writing to attendance file.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 }
