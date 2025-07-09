@@ -19,7 +19,7 @@ public class EmployeeDetailFrame extends JFrame {
     private JLabel totalPayLabel; // Label to display total pay
 
     private static final String ATTENDANCE_CSV_PATH = "src/resources/attendance.csv";
-    private static final double ATTENDANCE_HOURLY_RATE = 500.0;
+    private static double ATTENDANCE_HOURLY_RATE;
     private static final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofPattern("H:mm");
 
     private JButton clockInButton;
@@ -68,6 +68,9 @@ public class EmployeeDetailFrame extends JFrame {
         addField(mainPanel, gbc, "Clothing Allowance:", employee.getClothingAllowance(), row++);
         addField(mainPanel, gbc, "Gross Semi-monthly Rate:", employee.getSemiRate(), row++);
         addField(mainPanel, gbc, "Hourly Rate:", employee.getHourlyRate(), row++);
+        
+        // Set Hourly Rate based on Employee Data
+        ATTENDANCE_HOURLY_RATE = Double.parseDouble(employee.getHourlyRate());
         
         // Add separator
         addSeparator(mainPanel, gbc, row++);
